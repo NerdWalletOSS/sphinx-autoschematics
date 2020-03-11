@@ -8,6 +8,7 @@ setup(
     version="0.1.0",
     description="sphinx-autoschematics provides sphinx extenions for documenting schematics models",
     long_description=long_description,
+    long_description_content_type="text/markdown",
     author="Evan Borgstrom",
     author_email="evan@borgstrom.ca",
     url="https://github.com/NerdWalletOSS/sphinx-autoschematics",

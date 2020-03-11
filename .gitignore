@@ -1,0 +1,17 @@
+*.pyc
+.*.sw[op]
+
+/build/
+/configs/
+/docs/_build/
+dist/
+.cache/
+.eggs/
+
+*.egg-info/
+*.dist-info/
+
+.coverage
+.pytest_cache/
+.idea/
+.tox/

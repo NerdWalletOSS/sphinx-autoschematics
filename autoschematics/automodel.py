@@ -1,8 +1,6 @@
 import re
-from typing import Any, Dict, List, Tuple
 
 from schematics.types import BaseType, CompoundType, DictType, ListType, ModelType
-from sphinx.application import Sphinx
 from sphinx.ext.autodoc import AttributeDocumenter, ClassDocumenter
 from sphinx.util.docstrings import prepare_docstring
 
@@ -16,20 +14,18 @@ class SchematicsModelDocumenter(ClassDocumenter):
     directivetype = "class"
     option_spec = {}
 
-    def format_args(self, **kwargs) -> str:
+    def format_args(self, **kwargs):
         """Since we're generating documentation for consumption of the model attrs,
         we don't show any args
         """
         return ""
 
-    def get_object_members(self, want_all: bool) -> Tuple[bool, List[Tuple[str, Any]]]:
+    def get_object_members(self, want_all):
         # Force get_object_members to return all members
         # We will filter out the schematics types in filter_members below
         return super().get_object_members(want_all=True)
 
-    def filter_members(
-        self, members: List[Tuple[str, Any]], want_all: bool
-    ) -> List[Tuple[str, Any, bool]]:
+    def filter_members(self, members, want_all):
         """Filter the members of the model to return all of the types"""
         ret = []
 
@@ -44,7 +40,7 @@ class SchematicsModelDocumenter(ClassDocumenter):
 
         return ret
 
-    def generate(self, *args, **kwargs) -> None:
+    def generate(self, *args, **kwargs):
         old_indent = self.indent
 
         super().generate(*args, **kwargs)
@@ -80,16 +76,14 @@ class SchematicsTypeDocumenter(AttributeDocumenter):
     priority = 100
 
     @classmethod
-    def can_document_member(
-        cls, member: Any, membername: str, isattr: bool, parent: Any
-    ) -> bool:
+    def can_document_member(cls, member, membername, isattr, parent):
         return isinstance(member, BaseType)
 
-    def add_directive_header(self, sig: str) -> None:
+    def add_directive_header(self, sig):
         self.options["annotation"] = as_annotation(self.object)
         super().add_directive_header(sig)
 
-    def add_content(self, more_content: Any, no_docstring: bool = False) -> None:
+    def add_content(self, more_content, no_docstring):
         super().add_content(more_content, no_docstring)
 
         sourcename = self.get_sourcename()
@@ -157,7 +151,7 @@ class SchematicsTypeDocumenter(AttributeDocumenter):
         self.add_line("", sourcename)
 
 
-def as_annotation(field: BaseType) -> str:
+def as_annotation(field):
     if isinstance(field, (ListType, DictType)):
         repr_info = as_annotation(field.field)
     else:
@@ -166,11 +160,11 @@ def as_annotation(field: BaseType) -> str:
     return "{}({})".format(field.__class__.__name__, repr_info)
 
 
-def full_model_class_name(model_class: ModelType) -> str:
+def full_model_class_name(model_class):
     return "{}.{}".format(model_class.__module__, model_class.__name__)
 
 
-def humanize(word: str) -> str:
+def humanize(word):
     """
     Capitalize the first word and turn underscores into spaces and strip a
     trailing ``"_id"``, if any. Like :func:`titleize`, this is meant for
@@ -186,7 +180,7 @@ def humanize(word: str) -> str:
     return word
 
 
-def setup(app: Sphinx) -> Dict[str, Any]:
+def setup(app):
     app.add_autodocumenter(SchematicsModelDocumenter)
     app.add_autodocumenter(SchematicsTypeDocumenter)
 

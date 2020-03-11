@@ -15,39 +15,25 @@ matrix:
       env: TOXENV=docs
 
     - python: 2.7
-      env: TOXENV=py27-schematics-codecov
-    - python: 2.7
-      env: TOXENV=py27-marshmallow-codecov
+      env: TOXENV=py27-codecov
 
     - python: 3.5
-      env: TOXENV=py35-schematics-codecov
-    - python: 3.5
-      env: TOXENV=py35-marshmallow-codecov
+      env: TOXENV=py35-codecov
 
     - python: 3.6
-      env: TOXENV=py36-schematics-codecov
-    - python: 3.6
-      env: TOXENV=py36-marshmallow-codecov
+      env: TOXENV=py36-codecov
 
     - python: 3.7
-      env: TOXENV=py37-schematics-codecov
-    - python: 3.7
-      env: TOXENV=py37-marshmallow-codecov
+      env: TOXENV=py37-codecov
 
     - python: 3.8
-      env: TOXENV=py38-schematics-codecov
-    - python: 3.8
-      env: TOXENV=py38-marshmallow-codecov
+      env: TOXENV=py38-codecov
 
     - python: pypy
-      env: TOXENV=pypy2-schematics-codecov
-    - python: pypy
-      env: TOXENV=pypy2-marshmallow-codecov
+      env: TOXENV=pypy2-codecov
 
     - python: pypy3
-      env: TOXENV=pypy3-schematics-codecov
-    - python: pypy3
-      env: TOXENV=pypy3-marshmallow-codecov
+      env: TOXENV=pypy3-codecov
 
 
 install: pip install tox
@@ -61,14 +47,5 @@ deploy:
     on:
       branch: master
       python: 3.7
-      condition: $TOXENV = py37-marshmallow-codecov
+      condition: $TOXENV = py38-codecov
     distributions: "sdist bdist_wheel"
-
-  - provider: pages
-    local_dir: docs/_build/html/
-    skip_cleanup: true
-    github_token: $GITHUB_TOKEN
-    on:
-      branch: master
-      python: 3.7
-      condition: $TOXENV = docs

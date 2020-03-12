@@ -70,17 +70,8 @@ bar:
 ```
 
 <dl class="attribute">
-<dt id="models.ExampleModel.bar">
-<code class="sig-name descname">bar</code><em class="property"> ListType(StringType())</em></dt>
-<dd><div class="line-block">
-<div class="line"><strong>Required</strong>: False</div>
-<div class="line"><strong>Default</strong>: Undefined</div>
-</div>
-</dd></dl>
-
-<dl class="attribute">
 <dt id="models.ExampleModel.foo">
-<code class="sig-name descname">foo</code><em class="property"> StringType()</em>/dt>
+<code class="sig-name descname">foo</code><em class="property"> StringType()</em></dt>
 <dd><div class="line-block">
 <div class="line"><strong>Required</strong>: True</div>
 <div class="line"><strong>Default</strong>: Undefined</div>
@@ -88,3 +79,11 @@ bar:
 </div>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="models.ExampleModel.bar">
+<code class="sig-name descname">bar</code><em class="property"> ListType(StringType())</em></dt>
+<dd><div class="line-block">
+<div class="line"><strong>Required</strong>: False</div>
+<div class="line"><strong>Default</strong>: Undefined</div>
+</div>
+</dd></dl>

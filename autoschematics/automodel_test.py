@@ -18,7 +18,10 @@ def test_full_model_class_name():
     class ExampleModel(object):
         pass
 
-    assert full_model_class_name(ExampleModel) == "autoschematics.automodel_test.ExampleModel"
+    assert (
+        full_model_class_name(ExampleModel)
+        == "autoschematics.automodel_test.ExampleModel"
+    )
 
 
 def test_as_annotation():
@@ -32,8 +35,9 @@ def rootdir():
     return util.path(__file__).parent.parent.abspath()
 
 
-@pytest.mark.sphinx('html')
+@pytest.mark.sphinx("html")
 def test_documenters(app):
     app.build()
-    content = app.env.get_doctree('index')
-    assert content.astext() == u'\n\nclass models.ExampleModel\n\nExampleModel is a model for testing\n\nJust like in Sphinx .rst files you can use restructured text directives in the\ndocstring to provide rich content in the generated docs.\n\nfoo: Foo\nbar:\n  - bar1\n  - bar2\n\n\n\nbar ListType(StringType())\n\nRequired: False\n\nDefault: Undefined\n\n\n\nfoo StringType()\n\nRequired: True\n\nDefault: Undefined\n\nCustom value: True'  # noqa
+    content = app.env.get_doctree("index")
+    expected = u"\n\nclass models.ExampleModel\n\nExampleModel is a model for testing\n\nJust like in Sphinx .rst files you can use restructured text directives in the\ndocstring to provide rich content in the generated docs.\n\nfoo: Foo\nbar:\n  - bar1\n  - bar2\n\n\n\nbar ListType(StringType())\n\nRequired: False\n\nDefault: Undefined\n\n\n\nfoo StringType()\n\nRequired: True\n\nDefault: Undefined\n\nCustom value: True"  # noqa
+    assert content.astext() == expected

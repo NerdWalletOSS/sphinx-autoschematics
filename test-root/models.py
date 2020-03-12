@@ -17,13 +17,6 @@ class ExampleModel(Model):
           - bar2
     """
 
-    foo = StringType(
-        required=True,
-        metadata=dict(
-            custom_value=True
-        )
-    )
+    foo = StringType(required=True, metadata=dict(custom_value=True))
 
     bar = ListType(StringType)
-
-

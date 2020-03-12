@@ -14,7 +14,10 @@ setup(
     url="https://github.com/NerdWalletOSS/sphinx-autoschematics",
     license="Apache License Version 2.0",
     python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4",
-    install_requires=["six"],
+    install_requires=["six", "schematics>=2,<3", "sphinx"],
+    extras_require={
+        "test": ["pytest", "pytest-mock",],
+    },
     packages=["autoschematics"],
     classifiers=[
         "Development Status :: 4 - Beta",

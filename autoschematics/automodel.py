@@ -1,4 +1,5 @@
 import re
+from collections import OrderedDict
 
 from schematics.types import BaseType, CompoundType, DictType, ListType, ModelType
 from sphinx.ext.autodoc import AttributeDocumenter, ClassDocumenter
@@ -23,7 +24,7 @@ class SchematicsModelDocumenter(ClassDocumenter):
     def get_object_members(self, want_all):
         # Force get_object_members to return all members
         # We will filter out the schematics types in filter_members below
-        return super().get_object_members(want_all=True)
+        return super(SchematicsModelDocumenter, self).get_object_members(want_all=True)
 
     def filter_members(self, members, want_all):
         """Filter the members of the model to return all of the types"""
@@ -43,7 +44,7 @@ class SchematicsModelDocumenter(ClassDocumenter):
     def generate(self, *args, **kwargs):
         old_indent = self.indent
 
-        super().generate(*args, **kwargs)
+        super(SchematicsModelDocumenter, self).generate(*args, **kwargs)
 
         self.indent = old_indent
 
@@ -81,10 +82,10 @@ class SchematicsTypeDocumenter(AttributeDocumenter):
 
     def add_directive_header(self, sig):
         self.options["annotation"] = as_annotation(self.object)
-        super().add_directive_header(sig)
+        super(SchematicsTypeDocumenter, self).add_directive_header(sig)
 
-    def add_content(self, more_content, no_docstring):
-        super().add_content(more_content, no_docstring)
+    def add_content(self, more_content, no_docstring=False):
+        super(SchematicsTypeDocumenter, self).add_content(more_content, no_docstring)
 
         sourcename = self.get_sourcename()
 
@@ -117,7 +118,7 @@ class SchematicsTypeDocumenter(AttributeDocumenter):
             "typeclass",
             "validators",
         ]
-        values = self.object.__dict__.copy()
+        values = OrderedDict(self.object.__dict__.copy())
         values["default"] = values["_default"]
         for k in values:
             if k[0] == "_":
@@ -178,10 +179,3 @@ def humanize(word):
     word = re.sub(r"(?i)([a-z\d]*)", lambda m: m.group(1).lower(), word)
     word = re.sub(r"^\w", lambda m: m.group(0).upper(), word)
     return word
-
-
-def setup(app):
-    app.add_autodocumenter(SchematicsModelDocumenter)
-    app.add_autodocumenter(SchematicsTypeDocumenter)
-
-    return {"version": "1.0", "parallel_read_safe": True}

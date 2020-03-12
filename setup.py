@@ -5,15 +5,17 @@ with open("README.md", "r") as readme_fd:
 
 setup(
     name="sphinx-autoschematics",
-    version="0.1.0",
+    version="0.1.1",
     description="sphinx-autoschematics provides sphinx extenions for documenting schematics models",
     long_description=long_description,
+    long_description_content_type="text/markdown",
     author="Evan Borgstrom",
     author_email="evan@borgstrom.ca",
     url="https://github.com/NerdWalletOSS/sphinx-autoschematics",
     license="Apache License Version 2.0",
     python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4",
-    install_requires=["six"],
+    install_requires=["six", "schematics>=2,<3", "sphinx"],
+    extras_require={"test": ["pytest", "pytest-mock",],},
     packages=["autoschematics"],
     classifiers=[
         "Development Status :: 4 - Beta",

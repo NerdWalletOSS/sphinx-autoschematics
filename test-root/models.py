@@ -5,11 +5,13 @@ from schematics.models import Model
 
 class SubModel1(Model):
     """This is SubModel1"""
+
     name = StringType()
 
 
 class SubModel2(Model):
     """This is SubModel2"""
+
     name = StringType()
 
 

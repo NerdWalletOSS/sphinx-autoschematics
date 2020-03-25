@@ -40,7 +40,8 @@ def rootdir():
 def test_documenters(app):
     app.build()
     content = app.env.get_doctree("index")
-    expected = textwrap.dedent("""
+    expected = textwrap.dedent(
+        """
     
     class models.ExampleModel
     
@@ -136,5 +137,6 @@ def test_documenters(app):
     
     Required: False
     
-    Default: Undefined""")
+    Default: Undefined"""
+    )
     assert content.astext() == expected

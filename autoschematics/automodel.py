@@ -146,7 +146,9 @@ class SchematicsTypeDocumenter(AttributeDocumenter):
                 return ", ".join(val)
 
             if isinstance(val, dict):
-                return ", ".join("{}={}".format(dk, val[dk]) for dk in sorted(val.keys()))
+                return ", ".join(
+                    "{}={}".format(dk, val[dk]) for dk in sorted(val.keys())
+                )
 
             return val
 
@@ -170,7 +172,9 @@ class SchematicsTypeDocumenter(AttributeDocumenter):
             if key == "description":
                 continue
             self.add_line(
-                "| **{}**: {}".format(humanize(key), format_val(self.object.metadata[key])),
+                "| **{}**: {}".format(
+                    humanize(key), format_val(self.object.metadata[key])
+                ),
                 sourcename,
             )
 

@@ -31,7 +31,9 @@ class ExampleModel(Model):
 
     foo = StringType(
         required=True,
-        metadata=dict(custom_value=True, another_value=dict(one="1", two="2", apple="3")),
+        metadata=dict(
+            custom_value=True, another_value=dict(one="1", two="2", apple="3")
+        ),
         choices=("fizz", "buzz"),
     )
 

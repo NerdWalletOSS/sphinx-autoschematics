@@ -1,5 +1,10 @@
 # sphinx-autoschematics
 
+![Build Status](https://img.shields.io/travis/NerdWalletOSS/sphinx-autoschematics.svg)
+![CodeCov](https://img.shields.io/codecov/c/github/NerdWalletOSS/sphinx-autoschematics.svg)
+![PyPI - Version](https://img.shields.io/pypi/v/sphinx-autoschematics.svg)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/sphinx-autoschematics.svg)
+
 This is a Sphinx extension to automatically document [Schematics](https://schematics.readthedocs.io/) models.
 
 ## How to use it

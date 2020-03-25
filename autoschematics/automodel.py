@@ -1,7 +1,6 @@
 import re
-from collections import OrderedDict
 
-from schematics.types import BaseType, CompoundType, DictType, ListType, ModelType
+from schematics.types import BaseType, DictType, ListType, ModelType
 from sphinx.ext.autodoc import AttributeDocumenter, ClassDocumenter
 from sphinx.util.docstrings import prepare_docstring
 
@@ -118,7 +117,7 @@ class SchematicsTypeDocumenter(AttributeDocumenter):
             for line in prepare_docstring(desc):
                 self.add_line(line, sourcename)
 
-        IGNORE = [
+        fields_to_ignore = [
             "coerce_key",
             "export_level",
             "export_mapping",
@@ -133,18 +132,26 @@ class SchematicsTypeDocumenter(AttributeDocumenter):
             "typeclass",
             "validators",
         ]
-        values = OrderedDict(self.object.__dict__.copy())
-        values["default"] = values["_default"]
-        for k in values:
-            if k[0] == "_":
+
+        def field_sort(val):
+            """Custom sort key that makes required first, default second and everything else sorted by value"""
+            if val == 'required':
+                return '0'
+            if val == '_default':
+                return '1'
+            return val
+
+        for k in sorted(self.object.__dict__.keys(), key=field_sort):
+            v = self.object.__dict__[k]
+            if k == '_default':
+                k = 'default'
+
+            if k[0] == '_' or k in fields_to_ignore:
                 continue
 
-            if k in IGNORE:
-                continue
-
-            v = values[k]
             if v is None:
                 continue
+
             if isinstance(v, (list, tuple, dict)) and len(v) == 0:
                 continue
 

@@ -71,9 +71,9 @@ def test_documenters(app):
         
         Required: True
         
-        Choices: fizz, buzz
-        
         Default: Undefined
+        
+        Choices: fizz, buzz
         
         Custom value: True
         

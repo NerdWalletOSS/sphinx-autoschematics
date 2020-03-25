@@ -1,6 +1,7 @@
 # coding=utf8
 
 import pytest
+import textwrap
 
 from schematics.types import StringType
 from schematics.types.compound import ListType
@@ -39,5 +40,112 @@ def rootdir():
 def test_documenters(app):
     app.build()
     content = app.env.get_doctree("index")
-    expected = u"\n\nclass models.ExampleModel\n\nExampleModel is a model for testing\n\nJust like in Sphinx .rst files you can use restructured text directives in the\ndocstring to provide rich content in the generated docs.\n\nfoo: Foo\nbar:\n  - bar1\n  - bar2\n\n\n\nbar ListType(StringType())\n\nRequired: False\n\nDefault: Undefined\n\n\n\nfoo StringType()\n\nRequired: True\n\nDefault: Undefined\n\nCustom value: True"  # noqa
+    expected = textwrap.dedent(
+        u"""
+    
+        class models.ExampleModel
+        
+        ExampleModel is a model for testing
+        
+        Just like in Sphinx .rst files you can use restructured text directives in the
+        docstring to provide rich content in the generated docs.
+        
+        foo: Foo
+        bar:
+          - bar1
+          - bar2
+          
+          
+          
+        bar ListType(StringType())
+        
+        This is bar’s docstring
+        
+        Required: False
+        
+        Default: Undefined
+        
+        
+        
+        foo StringType()
+        
+        Required: True
+        
+        Default: Undefined
+        
+        Choices: fizz, buzz
+        
+        Another value: apple=3, one=1, two=2
+        
+        Custom value: True
+        
+        
+        
+        sub1 ModelType(SubModel1)
+        
+        See models.SubModel1
+        
+        This is sub1’s docstring
+        
+        Required: False
+        
+        Default: Undefined
+        
+        
+        
+        sub1a ModelType(SubModel1)
+        
+        See models.SubModel1
+        
+        Required: False
+        
+        Default: Undefined
+        
+        
+        
+        sub2 ListType(ModelType(SubModel2))
+        
+        See models.SubModel2
+        
+        Required: False
+        
+        Default: Undefined
+        
+        
+        
+        
+        
+        
+        
+        class models.SubModel1
+        
+        This is SubModel1’s docstring
+        
+        
+        
+        name StringType()
+        
+        Required: False
+        
+        Default: Undefined
+        
+        
+        
+        
+        
+        
+        
+        class models.SubModel2
+        
+        This is SubModel2’s docstring
+        
+        
+        
+        name StringType()
+        
+        Required: False
+        
+        Default: Undefined
+        """.rstrip()
+    )
     assert content.astext() == expected

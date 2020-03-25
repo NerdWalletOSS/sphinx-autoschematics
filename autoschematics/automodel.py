@@ -1,7 +1,6 @@
 import re
-from collections import OrderedDict
 
-from schematics.types import BaseType, CompoundType, DictType, ListType, ModelType
+from schematics.types import BaseType, DictType, ListType, ModelType
 from sphinx.ext.autodoc import AttributeDocumenter, ClassDocumenter
 from sphinx.util.docstrings import prepare_docstring
 
@@ -50,10 +49,12 @@ class SchematicsModelDocumenter(ClassDocumenter):
 
         sourcename = self.get_sourcename()
 
-        _, members = self.get_object_members(True)
-        for (name, member) in members:
-            if not isinstance(member, ModelType):
-                continue
+        seen_models = []
+
+        def add_model_type(member):
+            if member.model_class in seen_models:
+                return
+            seen_models.append(member.model_class)
 
             self.add_line("", sourcename)
             self.add_line("| ", sourcename)
@@ -64,6 +65,15 @@ class SchematicsModelDocumenter(ClassDocumenter):
                 ".. automodel:: {}\n".format(full_model_class_name(member.model_class)),
                 sourcename,
             )
+
+        _, members = self.get_object_members(True)
+        for (name, member) in members:
+            if isinstance(member, ModelType):
+                add_model_type(member)
+
+            if isinstance(member, (ListType, DictType)):
+                if isinstance(member.field, ModelType):
+                    add_model_type(member.field)
 
 
 class SchematicsTypeDocumenter(AttributeDocumenter):
@@ -84,26 +94,30 @@ class SchematicsTypeDocumenter(AttributeDocumenter):
         self.options["annotation"] = as_annotation(self.object)
         super(SchematicsTypeDocumenter, self).add_directive_header(sig)
 
+    def add_model_line(self, sourcename, model_class):
+        self.add_line(
+            "See :py:class:`{}`".format(full_model_class_name(model_class)), sourcename,
+        )
+        self.add_line("", sourcename)
+
     def add_content(self, more_content, no_docstring=False):
         super(SchematicsTypeDocumenter, self).add_content(more_content, no_docstring)
 
         sourcename = self.get_sourcename()
 
         if isinstance(self.object, ModelType):
-            self.add_line(
-                "See :py:class:`{}`".format(
-                    full_model_class_name(self.object.model_class)
-                ),
-                sourcename,
-            )
-            self.add_line("", sourcename)
+            self.add_model_line(sourcename, self.object.model_class)
+
+        if isinstance(self.object, (ListType, DictType)):
+            if isinstance(self.object.field, ModelType):
+                self.add_model_line(sourcename, self.object.field.model_class)
 
         desc = self.object.metadata.get("description")
         if desc is not None:
             for line in prepare_docstring(desc):
                 self.add_line(line, sourcename)
 
-        IGNORE = [
+        fields_to_ignore = [
             "coerce_key",
             "export_level",
             "export_mapping",
@@ -118,34 +132,49 @@ class SchematicsTypeDocumenter(AttributeDocumenter):
             "typeclass",
             "validators",
         ]
-        values = OrderedDict(self.object.__dict__.copy())
-        values["default"] = values["_default"]
-        for k in values:
-            if k[0] == "_":
+
+        def field_sort(val):
+            """Custom sort key that makes required first, default second and everything else sorted by value"""
+            if val == "required":
+                return "0"
+            if val == "_default":
+                return "1"
+            return val
+
+        def format_val(val):
+            if isinstance(val, (list, tuple)):
+                return ", ".join(val)
+
+            if isinstance(val, dict):
+                return ", ".join(
+                    "{}={}".format(dk, val[dk]) for dk in sorted(val.keys())
+                )
+
+            return val
+
+        for k in sorted(self.object.__dict__.keys(), key=field_sort):
+            v = self.object.__dict__[k]
+            if k == "_default":
+                k = "default"
+
+            if k[0] == "_" or k in fields_to_ignore:
                 continue
 
-            if k in IGNORE:
-                continue
-
-            v = values[k]
             if v is None:
                 continue
+
             if isinstance(v, (list, tuple, dict)) and len(v) == 0:
                 continue
 
-            if isinstance(v, (list, tuple)):
-                v = ", ".join(v)
+            self.add_line("| **{}**: {}".format(humanize(k), format_val(v)), sourcename)
 
-            if isinstance(v, dict):
-                v = ", ".join("{}={}".format(dk, dv) for dk, dv in v.items())
-
-            self.add_line("| **{}**: {}".format(humanize(k), v), sourcename)
-
-        for key in self.object.metadata:
+        for key in sorted(self.object.metadata.keys()):
             if key == "description":
                 continue
             self.add_line(
-                "| **{}**: {}".format(humanize(key), self.object.metadata[key]),
+                "| **{}**: {}".format(
+                    humanize(key), format_val(self.object.metadata[key])
+                ),
                 sourcename,
             )
 

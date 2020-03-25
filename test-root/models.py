@@ -29,7 +29,9 @@ class ExampleModel(Model):
           - bar2
     """
 
-    foo = StringType(required=True, metadata=dict(custom_value=True), choices=("fizz", "buzz"))
+    foo = StringType(
+        required=True, metadata=dict(custom_value=True), choices=("fizz", "buzz")
+    )
 
     #: This is bar's docstring
     bar = ListType(StringType)

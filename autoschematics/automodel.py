@@ -50,11 +50,7 @@ class SchematicsModelDocumenter(ClassDocumenter):
 
         sourcename = self.get_sourcename()
 
-        _, members = self.get_object_members(True)
-        for (name, member) in members:
-            if not isinstance(member, ModelType):
-                continue
-
+        def add_model_type(member):
             self.add_line("", sourcename)
             self.add_line("| ", sourcename)
             self.add_line("| ", sourcename)
@@ -64,6 +60,15 @@ class SchematicsModelDocumenter(ClassDocumenter):
                 ".. automodel:: {}\n".format(full_model_class_name(member.model_class)),
                 sourcename,
             )
+
+        _, members = self.get_object_members(True)
+        for (name, member) in members:
+            if isinstance(member, ModelType):
+                add_model_type(member)
+
+            if isinstance(member, (ListType, DictType)):
+                if isinstance(member.field, ModelType):
+                    add_model_type(member.field)
 
 
 class SchematicsTypeDocumenter(AttributeDocumenter):
@@ -84,19 +89,26 @@ class SchematicsTypeDocumenter(AttributeDocumenter):
         self.options["annotation"] = as_annotation(self.object)
         super(SchematicsTypeDocumenter, self).add_directive_header(sig)
 
+    def add_model_line(self, sourcename, model_class):
+        self.add_line(
+            "See :py:class:`{}`".format(
+                full_model_class_name(model_class)
+            ),
+            sourcename,
+        )
+        self.add_line("", sourcename)
+
     def add_content(self, more_content, no_docstring=False):
         super(SchematicsTypeDocumenter, self).add_content(more_content, no_docstring)
 
         sourcename = self.get_sourcename()
 
         if isinstance(self.object, ModelType):
-            self.add_line(
-                "See :py:class:`{}`".format(
-                    full_model_class_name(self.object.model_class)
-                ),
-                sourcename,
-            )
-            self.add_line("", sourcename)
+            self.add_model_line(sourcename, self.object.model_class)
+
+        if isinstance(self.object, (ListType, DictType)):
+            if isinstance(self.object.field, ModelType):
+                self.add_model_line(sourcename, self.object.field.model_class)
 
         desc = self.object.metadata.get("description")
         if desc is not None:

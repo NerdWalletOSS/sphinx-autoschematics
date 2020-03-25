@@ -1,6 +1,16 @@
 from schematics.types import StringType
-from schematics.types.compound import ListType
+from schematics.types.compound import ListType, ModelType
 from schematics.models import Model
+
+
+class SubModel1(Model):
+    """This is SubModel1"""
+    name = StringType()
+
+
+class SubModel2(Model):
+    """This is SubModel2"""
+    name = StringType()
 
 
 class ExampleModel(Model):
@@ -20,3 +30,7 @@ class ExampleModel(Model):
     foo = StringType(required=True, metadata=dict(custom_value=True))
 
     bar = ListType(StringType)
+
+    sub1 = ModelType(SubModel1)
+
+    sub2 = ListType(ModelType(SubModel2))

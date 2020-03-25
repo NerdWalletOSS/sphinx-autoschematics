@@ -5,7 +5,7 @@ with open("README.md", "r") as readme_fd:
 
 setup(
     name="sphinx-autoschematics",
-    version="0.1.1",
+    version="0.1.2",
     description="sphinx-autoschematics provides sphinx extenions for documenting schematics models",
     long_description=long_description,
     long_description_content_type="text/markdown",

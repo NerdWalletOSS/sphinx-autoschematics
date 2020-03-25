@@ -43,100 +43,101 @@ def test_documenters(app):
     expected = textwrap.dedent(
         """
     
-    class models.ExampleModel
-    
-    ExampleModel is a model for testing
-    
-    Just like in Sphinx .rst files you can use restructured text directives in the
-    docstring to provide rich content in the generated docs.
-    
-    foo: Foo
-    bar:
-      - bar1
-      - bar2
-      
-      
-      
-    bar ListType(StringType())
-    
-    Required: False
-    
-    Default: Undefined
-    
-    
-    
-    foo StringType()
-    
-    Required: True
-    
-    Default: Undefined
-    
-    Custom value: True
-    
-    
-    
-    sub1 ModelType(SubModel1)
-    
-    See models.SubModel1
-    
-    Required: False
-    
-    Default: Undefined
-    
-    
-    
-    sub1a ModelType(SubModel1)
-    
-    See models.SubModel1
-    
-    Required: False
-    
-    Default: Undefined
-    
-    
-    
-    sub2 ListType(ModelType(SubModel2))
-    
-    See models.SubModel2
-    
-    Required: False
-    
-    Default: Undefined
-    
-    
-    
-    
-    
-    
-    
-    class models.SubModel1
-    
-    This is SubModel1
-    
-    
-    
-    name StringType()
-    
-    Required: False
-    
-    Default: Undefined
-    
-    
-    
-    
-    
-    
-    
-    class models.SubModel2
-    
-    This is SubModel2
-    
-    
-    
-    name StringType()
-    
-    Required: False
-    
-    Default: Undefined"""
+        class models.ExampleModel
+        
+        ExampleModel is a model for testing
+        
+        Just like in Sphinx .rst files you can use restructured text directives in the
+        docstring to provide rich content in the generated docs.
+        
+        foo: Foo
+        bar:
+          - bar1
+          - bar2
+          
+          
+          
+        bar ListType(StringType())
+        
+        Required: False
+        
+        Default: Undefined
+        
+        
+        
+        foo StringType()
+        
+        Required: True
+        
+        Default: Undefined
+        
+        Custom value: True
+        
+        
+        
+        sub1 ModelType(SubModel1)
+        
+        See models.SubModel1
+        
+        Required: False
+        
+        Default: Undefined
+        
+        
+        
+        sub1a ModelType(SubModel1)
+        
+        See models.SubModel1
+        
+        Required: False
+        
+        Default: Undefined
+        
+        
+        
+        sub2 ListType(ModelType(SubModel2))
+        
+        See models.SubModel2
+        
+        Required: False
+        
+        Default: Undefined
+        
+        
+        
+        
+        
+        
+        
+        class models.SubModel1
+        
+        This is SubModel1
+        
+        
+        
+        name StringType()
+        
+        Required: False
+        
+        Default: Undefined
+        
+        
+        
+        
+        
+        
+        
+        class models.SubModel2
+        
+        This is SubModel2
+        
+        
+        
+        name StringType()
+        
+        Required: False
+        
+        Default: Undefined
+        """.rstrip()
     )
     assert content.astext() == expected

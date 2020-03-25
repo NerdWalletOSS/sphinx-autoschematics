@@ -135,18 +135,18 @@ class SchematicsTypeDocumenter(AttributeDocumenter):
 
         def field_sort(val):
             """Custom sort key that makes required first, default second and everything else sorted by value"""
-            if val == 'required':
-                return '0'
-            if val == '_default':
-                return '1'
+            if val == "required":
+                return "0"
+            if val == "_default":
+                return "1"
             return val
 
         for k in sorted(self.object.__dict__.keys(), key=field_sort):
             v = self.object.__dict__[k]
-            if k == '_default':
-                k = 'default'
+            if k == "_default":
+                k = "default"
 
-            if k[0] == '_' or k in fields_to_ignore:
+            if k[0] == "_" or k in fields_to_ignore:
                 continue
 
             if v is None:

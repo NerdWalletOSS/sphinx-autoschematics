@@ -41,7 +41,7 @@ def test_documenters(app):
     app.build()
     content = app.env.get_doctree("index")
     expected = textwrap.dedent(
-        """
+        u"""
     
         class models.ExampleModel
         
@@ -59,6 +59,8 @@ def test_documenters(app):
           
         bar ListType(StringType())
         
+        This is bar’s docstring
+        
         Required: False
         
         Default: Undefined
@@ -69,6 +71,8 @@ def test_documenters(app):
         
         Required: True
         
+        Choices: fizz, buzz
+        
         Default: Undefined
         
         Custom value: True
@@ -78,6 +82,8 @@ def test_documenters(app):
         sub1 ModelType(SubModel1)
         
         See models.SubModel1
+        
+        This is sub1’s docstring
         
         Required: False
         
@@ -111,7 +117,7 @@ def test_documenters(app):
         
         class models.SubModel1
         
-        This is SubModel1
+        This is SubModel1’s docstring
         
         
         
@@ -129,7 +135,7 @@ def test_documenters(app):
         
         class models.SubModel2
         
-        This is SubModel2
+        This is SubModel2’s docstring
         
         
         

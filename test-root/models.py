@@ -33,4 +33,6 @@ class ExampleModel(Model):
 
     sub1 = ModelType(SubModel1)
 
+    sub1a = ModelType(SubModel1)
+
     sub2 = ListType(ModelType(SubModel2))

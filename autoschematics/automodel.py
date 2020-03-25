@@ -50,7 +50,13 @@ class SchematicsModelDocumenter(ClassDocumenter):
 
         sourcename = self.get_sourcename()
 
+        seen_models = []
+
         def add_model_type(member):
+            if member.model_class in seen_models:
+                return
+            seen_models.append(member.model_class)
+
             self.add_line("", sourcename)
             self.add_line("| ", sourcename)
             self.add_line("| ", sourcename)

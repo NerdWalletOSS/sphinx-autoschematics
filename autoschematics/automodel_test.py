@@ -84,6 +84,16 @@ def test_documenters(app):
     
     
     
+    sub1a ModelType(SubModel1)
+    
+    See models.SubModel1
+    
+    Required: False
+    
+    Default: Undefined
+    
+    
+    
     sub2 ListType(ModelType(SubModel2))
     
     See models.SubModel2

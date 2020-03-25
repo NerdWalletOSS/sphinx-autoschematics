@@ -75,6 +75,8 @@ def test_documenters(app):
         
         Choices: fizz, buzz
         
+        Another value: apple=3, one=1, two=2
+        
         Custom value: True
         
         

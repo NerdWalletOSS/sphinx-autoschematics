@@ -141,6 +141,15 @@ class SchematicsTypeDocumenter(AttributeDocumenter):
                 return "1"
             return val
 
+        def format_val(val):
+            if isinstance(val, (list, tuple)):
+                return ", ".join(val)
+
+            if isinstance(val, dict):
+                return ", ".join("{}={}".format(dk, val[dk]) for dk in sorted(val.keys()))
+
+            return val
+
         for k in sorted(self.object.__dict__.keys(), key=field_sort):
             v = self.object.__dict__[k]
             if k == "_default":
@@ -155,19 +164,13 @@ class SchematicsTypeDocumenter(AttributeDocumenter):
             if isinstance(v, (list, tuple, dict)) and len(v) == 0:
                 continue
 
-            if isinstance(v, (list, tuple)):
-                v = ", ".join(v)
+            self.add_line("| **{}**: {}".format(humanize(k), format_val(v)), sourcename)
 
-            if isinstance(v, dict):
-                v = ", ".join("{}={}".format(dk, dv) for dk, dv in v.items())
-
-            self.add_line("| **{}**: {}".format(humanize(k), v), sourcename)
-
-        for key in self.object.metadata:
+        for key in sorted(self.object.metadata.keys()):
             if key == "description":
                 continue
             self.add_line(
-                "| **{}**: {}".format(humanize(key), self.object.metadata[key]),
+                "| **{}**: {}".format(humanize(key), format_val(self.object.metadata[key])),
                 sourcename,
             )
 

@@ -143,11 +143,11 @@ class SchematicsTypeDocumenter(AttributeDocumenter):
 
         def format_val(val):
             if isinstance(val, (list, tuple)):
-                return ", ".join(val)
+                return ", ".join([str(x) for x in val])
 
             if isinstance(val, dict):
                 return ", ".join(
-                    "{}={}".format(dk, val[dk]) for dk in sorted(val.keys())
+                    "{}={}".format(dk, str(val[dk])) for dk in sorted(val.keys())
                 )
 
             return val

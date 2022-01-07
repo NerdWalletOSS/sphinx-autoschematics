@@ -96,7 +96,8 @@ class SchematicsTypeDocumenter(AttributeDocumenter):
 
     def add_model_line(self, sourcename, model_class):
         self.add_line(
-            "See :py:class:`{}`".format(full_model_class_name(model_class)), sourcename,
+            "See :py:class:`{}`".format(full_model_class_name(model_class)),
+            sourcename,
         )
         self.add_line("", sourcename)
 

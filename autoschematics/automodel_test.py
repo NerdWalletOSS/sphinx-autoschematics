@@ -1,14 +1,13 @@
 # coding=utf8
 
-import pytest
 import textwrap
 
-from schematics.types import StringType
-from schematics.types.compound import ListType
-
-from sphinx.testing import util
+import pytest
 
 from autoschematics.automodel import as_annotation, full_model_class_name, humanize
+from schematics.types import StringType
+from schematics.types.compound import ListType
+from sphinx.testing import util
 
 
 def test_humanize():

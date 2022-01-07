@@ -1,6 +1,6 @@
+from schematics.models import Model
 from schematics.types import StringType
 from schematics.types.compound import ListType, ModelType
-from schematics.models import Model
 
 
 class SubModel1(Model):

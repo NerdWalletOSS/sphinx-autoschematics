@@ -113,6 +113,16 @@ def test_documenters(app):
         
         
         
+        sub2_with_default ListType(ModelType(SubModel2))
+        
+        See models.SubModel2
+        
+        Required: False
+        
+        Default: name=default_name
+        
+        
+        
         
         
         

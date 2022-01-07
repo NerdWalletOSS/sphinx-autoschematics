@@ -46,5 +46,7 @@ class ExampleModel(Model):
 
     sub2 = ListType(ModelType(SubModel2))
 
+    sub2_with_default = ListType(ModelType(SubModel2), default=[SubModel2({"name": "default_name"})])
+
     #: Secret will not be documented
     secret = StringType(metadata=dict(document=False))

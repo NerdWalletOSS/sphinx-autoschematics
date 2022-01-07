@@ -1,6 +1,6 @@
+from schematics.models import Model
 from schematics.types import StringType
 from schematics.types.compound import ListType, ModelType
-from schematics.models import Model
 
 
 class SubModel1(Model):
@@ -45,6 +45,10 @@ class ExampleModel(Model):
     sub1a = ModelType(SubModel1)
 
     sub2 = ListType(ModelType(SubModel2))
+
+    sub2_with_default = ListType(
+        ModelType(SubModel2), default=[SubModel2({"name": "default_name"})]
+    )
 
     #: Secret will not be documented
     secret = StringType(metadata=dict(document=False))

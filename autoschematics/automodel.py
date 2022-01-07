@@ -1,5 +1,6 @@
 import re
 
+from schematics.models import Model
 from schematics.types import BaseType, DictType, ListType, ModelType
 from sphinx.ext.autodoc import AttributeDocumenter, ClassDocumenter
 from sphinx.util.docstrings import prepare_docstring
@@ -96,7 +97,8 @@ class SchematicsTypeDocumenter(AttributeDocumenter):
 
     def add_model_line(self, sourcename, model_class):
         self.add_line(
-            "See :py:class:`{}`".format(full_model_class_name(model_class)), sourcename,
+            "See :py:class:`{}`".format(full_model_class_name(model_class)),
+            sourcename,
         )
         self.add_line("", sourcename)
 
@@ -142,14 +144,12 @@ class SchematicsTypeDocumenter(AttributeDocumenter):
             return val
 
         def format_val(val):
-            if isinstance(val, (list, tuple)):
-                return ", ".join(val)
-
-            if isinstance(val, dict):
-                return ", ".join(
-                    "{}={}".format(dk, val[dk]) for dk in sorted(val.keys())
-                )
-
+            if isinstance(val, Model):
+                return format_val(val.to_primitive())
+            elif isinstance(val, (tuple, list)):
+                return ", ".join(format_val(elem) for elem in val)
+            elif isinstance(val, dict):
+                return ", ".join(f"{dk}={format_val(val[dk])}" for dk in sorted(val))
             return val
 
         for k in sorted(self.object.__dict__.keys(), key=field_sort):

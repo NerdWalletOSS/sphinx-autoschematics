@@ -148,10 +148,10 @@ class SchematicsTypeDocumenter(AttributeDocumenter):
             if isinstance(val, Model):
                 val = val.to_primitive()
 
-            if isinstance(val, Iterable):
-                return ", ".join(format_val(elem) for elem in val)
-            elif isinstance(val, dict):
+            if isinstance(val, dict):
                 return ", ".join(f"{dk}={format_val(val[dk])}" for dk in sorted(val))
+            elif isinstance(val, Iterable):
+                return ", ".join(format_val(elem) for elem in val)
             return val
 
         for k in sorted(self.object.__dict__.keys(), key=field_sort):

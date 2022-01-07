@@ -1,5 +1,4 @@
 import re
-from collections.abc import Iterable
 
 from schematics.models import Model
 from schematics.types import BaseType, DictType, ListType, ModelType
@@ -146,12 +145,11 @@ class SchematicsTypeDocumenter(AttributeDocumenter):
 
         def format_val(val):
             if isinstance(val, Model):
-                val = val.to_primitive()
-
-            if isinstance(val, dict):
-                return ", ".join(f"{dk}={format_val(val[dk])}" for dk in sorted(val))
-            elif isinstance(val, Iterable):
+                return format_val(val.to_primitive())
+            elif isinstance(val, (tuple, list)):
                 return ", ".join(format_val(elem) for elem in val)
+            elif isinstance(val, dict):
+                return ", ".join(f"{dk}={format_val(val[dk])}" for dk in sorted(val))
             return val
 
         for k in sorted(self.object.__dict__.keys(), key=field_sort):

@@ -143,7 +143,7 @@ class SchematicsTypeDocumenter(AttributeDocumenter):
 
         def format_val(val):
             if isinstance(val, (list, tuple)):
-                return ", ".join([str(x) for x in val])
+                return ", ".join(map(str, val))
 
             if isinstance(val, dict):
                 return ", ".join(

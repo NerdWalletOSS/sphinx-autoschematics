@@ -102,8 +102,8 @@ class SchematicsTypeDocumenter(AttributeDocumenter):
         )
         self.add_line("", sourcename)
 
-    def add_content(self, more_content, no_docstring=False):
-        super(SchematicsTypeDocumenter, self).add_content(more_content, no_docstring)
+    def add_content(self, more_content):
+        super(SchematicsTypeDocumenter, self).add_content(more_content)
 
         sourcename = self.get_sourcename()
 
